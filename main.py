@@ -16,6 +16,7 @@ while running:
             running = False
 
     screen.fill('black')
+    player.update()  # 画小车之前update一下，动起来
     screen.blit(player.image, player.rect)  # 将image画到rect(需要先画图再画小车)
     pygame.display.flip()  # 染完色更新一哈
 
