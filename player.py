@@ -7,8 +7,8 @@ class Player(pygame.sprite.Sprite):  # 小组件
         super(Player, self).__init__()
         self.width = 100
         self.height = 50
-        self.image = pygame.Surface((self.width, self.height))
-        self.image.fill('red')
+        self.image_source = pygame.image.load('static/images/car.png').convert()
+        self.image = pygame.transform.scale(self.image_source, (self.width, self.height))
         self.rect = self.image.get_rect()  # 取出矩形
         self.rect.center = (config.SCREEN_WIDTH / 2, config.SCREEN_HEIGHT / 2)  # 对齐地图中心
         self.last_time = pygame.time.get_ticks()  # 返回当前时刻，单位ms
