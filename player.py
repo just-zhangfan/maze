@@ -21,4 +21,8 @@ class Player(pygame.sprite.Sprite):  # 小组件
 
     def update(self):
         self.update_delta_time()  # 每次update调用一次更新函数
-        self.rect.x += 200 * self.delta_time  # 每秒移动200像素
+        key_pressed = pygame.key.get_pressed()
+        if key_pressed[pygame.K_UP]:
+            self.rect.x += 200 * self.delta_time
+        elif key_pressed[pygame.K_DOWN]:
+            self.rect.x -= 200 * self.delta_time
