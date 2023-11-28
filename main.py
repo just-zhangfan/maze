@@ -10,6 +10,11 @@ pygame.mixer.init()  # 初始化声音
 screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
+# 自己的图标
+ico = pygame.image.load('static/images/zf.ico').convert()
+pygame.display.set_icon(ico)
+pygame.display.set_caption("zf's game")
+
 # bgm
 pygame.mixer.music.load('static/sounds/bgm.wav')
 pygame.mixer.music.set_volume(0.1)
