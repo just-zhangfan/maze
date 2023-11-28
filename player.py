@@ -1,20 +1,19 @@
 import pygame
-import config
 import math
 
 
 class Player(pygame.sprite.Sprite):  # 小组件
-    def __init__(self):
+    def __init__(self, center_x, center_y, forward_angle):
         super(Player, self).__init__()
         self.width = 100
         self.height = 50
-        self.forward_angle = 0  # 转弯的角度（与x轴顺时针转动的角度）
+        self.forward_angle = forward_angle  # 转弯的角度（与x轴顺时针转动的角度）
         self.image_source = pygame.image.load('static/images/car.png').convert()
         self.image = pygame.transform.scale(self.image_source, (self.width, self.height))
         self.image = pygame.transform.rotate(self.image, -self.forward_angle)  # 这里参数是逆时针
         self.image.set_colorkey('black')  # 将小车的黑色变成透明
         self.rect = self.image.get_rect()  # 取出矩形
-        self.rect.center = (config.SCREEN_WIDTH / 2, config.SCREEN_HEIGHT / 2)  # 对齐地图中心
+        self.rect.center = (center_x, center_y)  # 对齐地图中心
         self.last_time = pygame.time.get_ticks()  # 返回当前时刻，单位ms
         self.delta_time = 0  # 相邻两帧之间的时间间隔
 

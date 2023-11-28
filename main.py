@@ -8,7 +8,7 @@ pygame.mixer.init()  # 初始化声音
 screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
-game_manager = GameManager(screen)
+game_manager = GameManager(screen, 1)
 
 running = True
 while running:

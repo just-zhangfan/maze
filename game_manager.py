@@ -6,12 +6,36 @@ from utils.collide import collided_rect
 
 # 统一管理player, wall等资源
 class GameManager:
-    def __init__(self, screen):
+    def __init__(self, screen, level):
         self.screen = screen
-        self.player = Player()
+        self.level = level  # 加个关卡
+        self.player = None
         self.walls = pygame.sprite.Group()  # 墙不止一个可以创建一个组来维护
-        wall = Wall(200, 200, 500, 5)  # 初始化
-        wall.add(self.walls)  # 将wall加到walls组里
+        self.load()
+
+    def load_walls(self, walls):
+        self.walls.empty()  # 清空之前关卡
+        for x, y, width, height in walls:
+            wall = Wall(x, y, width, height)
+            wall.add(self.walls)  # 不要写反了
+
+    def load_player(self, center_x, center_y, forward_angle):
+        if self.player:
+            self.player.kill()  # 每次加载删掉之前的
+        self.player = Player(center_x, center_y, forward_angle)
+
+    # 加载当前这一关的地图信息
+    def load(self):
+        with open('static/maps/level1.txt', 'r') as fin:
+            walls_cnt = int(fin.readline())
+            walls = []
+            for i in range(walls_cnt):
+                x, y, width, height = map(int, fin.readline().split())
+                walls.append((x, y, width, height))
+            self.load_walls(walls)
+
+            center_x, center_y, forward_angle = map(int, fin.readline().split())
+            self.load_player(center_x, center_y, forward_angle)
 
     def check_collide(self):  # 检测碰撞
         # 单个对象和组进行判断，false表示碰撞后组不会被删
