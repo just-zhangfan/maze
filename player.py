@@ -65,13 +65,15 @@ class Player(pygame.sprite.Sprite):  # 小组件
         self.rect.center = center  # 将新的矩阵的中心与原来的中心重叠
 
     def move(self, direction = 1):
-        if abs(self.move_velocity) > 50:  # 符合现实一点
+        if direction == 1 and abs(self.move_velocity) > 50:  # 符合现实一点
             self.rotate(direction)  # 只有车在前进或后退时，车身角度才会变化，原地打方向盘，车身角度不动
-            # math.cos要接收弧度，需要将角度转换为弧度(几分之pi形式)
-            vx = self.move_velocity * math.cos(math.pi * self.forward_angle / 180) * direction
-            vy = self.move_velocity * math.sin(math.pi * self.forward_angle / 180) * direction
-            self.rect.x += vx * self.delta_time
-            self.rect.y += vy * self.delta_time
+        # math.cos要接收弧度，需要将角度转换为弧度(几分之pi形式)
+        vx = self.move_velocity * math.cos(math.pi * self.forward_angle / 180) * direction
+        vy = self.move_velocity * math.sin(math.pi * self.forward_angle / 180) * direction
+        self.rect.x += vx * self.delta_time
+        self.rect.y += vy * self.delta_time
+        if direction == -1 and abs(self.move_velocity) > 50:  # -1放在后面执行（因为撞完后是先移动再转，符合实际）
+            self.rotate(direction)  # 只有车在前进或后退时，车身角度才会变化，原地打方向盘，车身角度不动
 
     def crash(self):  # 撞墙了
         # print('撞墙了')
