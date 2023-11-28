@@ -41,10 +41,14 @@ class Player(pygame.sprite.Sprite):  # 小组件
         else:
             self.move_velocity = int(self.move_velocity * self.friction)  # 没按up时，一直*f，直到速度降为0
 
+        sign = 1  # 正表示前进，实现倒车的时候应该为朝反方向
+        if self.move_velocity < 0:
+            sign = -1
+
         if key_pressed[pygame.K_RIGHT]:
-            self.rotate_velocity = self.rotate_velocity_limit
+            self.rotate_velocity = self.rotate_velocity_limit * sign
         elif key_pressed[pygame.K_LEFT]:
-            self.rotate_velocity = -self.rotate_velocity_limit
+            self.rotate_velocity = -self.rotate_velocity_limit * sign
         else:
             self.rotate_velocity = 0  # 没有按的时候角速度清空
 
