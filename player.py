@@ -25,6 +25,9 @@ class Player(pygame.sprite.Sprite):  # 小组件
         self.rotate_velocity = 0  # 旋转速度（角速度）
         self.friction = 0.95  # 摩檫力
 
+        self.crash_sound = pygame.mixer.Sound('static/sounds/crash.mp3')
+        self.crash_sound.set_volume(0.1)  # 10%大小声音
+
     def update_delta_time(self):
         cur_time = pygame.time.get_ticks()
         self.delta_time = (cur_time - self.last_time) / 1000  # 时间间隔，将ms转为s
@@ -76,6 +79,7 @@ class Player(pygame.sprite.Sprite):  # 小组件
             self.rotate(direction)  # 只有车在前进或后退时，车身角度才会变化，原地打方向盘，车身角度不动
 
     def crash(self):  # 撞墙了
+        self.crash_sound.play()
         # print('撞墙了')
         self.move(-1)  # 退回来
         # 再实现一个完全弹性碰撞，角速度一样，反弹速度可以不一样

@@ -4,6 +4,7 @@ from game_manager import GameManager
 
 
 pygame.init()
+pygame.mixer.init()  # 初始化声音
 screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
