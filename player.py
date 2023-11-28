@@ -78,6 +78,11 @@ class Player(pygame.sprite.Sprite):  # 小组件
     def crash(self):  # 撞墙了
         # print('撞墙了')
         self.move(-1)  # 退回来
+        # 再实现一个完全弹性碰撞，角速度一样，反弹速度可以不一样
+        if self.move_velocity >= 0:  # 头撞上
+            self.move_velocity = min(-self.move_velocity, -100)
+        else:  # 尾巴撞上
+            self.move_velocity = max(self.move_velocity, 100)
 
     def update(self):
         self.update_delta_time()  # 每次update调用一次更新函数
