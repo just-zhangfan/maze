@@ -8,6 +8,11 @@ pygame.mixer.init()  # 初始化声音
 screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
+# bgm
+pygame.mixer.music.load('static/sounds/bgm.wav')
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)  # 传-1表示循环播放
+
 game_manager = GameManager(screen, 1)
 
 running = True
