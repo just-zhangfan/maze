@@ -55,6 +55,10 @@ class Player(pygame.sprite.Sprite):  # 小组件
         self.image = pygame.transform.scale(self.image_source, (self.width, self.height))
         self.image = pygame.transform.rotate(self.image, -self.forward_angle)
         self.image.set_colorkey('black')
+        # 围绕中心点转
+        center = self.rect.center  # 取出中心点
+        self.rect = self.image.get_rect()  # 重置rect得到新的矩阵
+        self.rect.center = center  # 将新的矩阵的中心与原来的中心重叠
 
     def move(self):
         if self.move_velocity != 0:
