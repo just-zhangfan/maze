@@ -4,6 +4,7 @@ from wall import Wall
 from star import Star
 from target import Target
 from utils.collide import collided_rect, collided_circle
+import os
 
 
 # 统一管理player, wall等资源
@@ -49,7 +50,7 @@ class GameManager:
 
     # 加载当前这一关的地图信息
     def load(self):
-        with open('static/maps/level1.txt', 'r') as fin:
+        with open('static/maps/level%d.txt' % self.level, 'r') as fin:
             walls_cnt = int(fin.readline())
             walls = []
             for i in range(walls_cnt):
@@ -73,6 +74,14 @@ class GameManager:
 
             center_x, center_y, forward_angle = map(int, fin.readline().split())
             self.load_player(center_x, center_y, forward_angle)
+
+    def next_level(self):
+        self.level += 1
+        # 先判断下一关文件是否存在
+        if not os.path.isfile('static/maps/level%d.txt' % self.level):
+            return False  # 没有下一关
+        self.load()
+        return True  # 表示已经加载了下一关
 
     def check_collide(self):  # 检测碰撞
         # 单个对象和组进行判断，false表示碰撞后组不会被删
@@ -106,4 +115,4 @@ class GameManager:
         self.screen.blit(self.player.image, self.player.rect)  # 将image画到rect
         self.walls.update()  # 会自动调用组里面的每一个wall的update
         self.walls.draw(self.screen)  # 组调用draw，自动遍历组里所有对象，然后画到屏幕上
-        return success
+        return success  # 返回是否获胜

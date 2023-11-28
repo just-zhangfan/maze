@@ -11,13 +11,22 @@ clock = pygame.time.Clock()
 game_manager = GameManager(screen, 1)
 
 running = True
+success_time = -1  # 获胜时刻，-1表示没有获胜
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # 关闭窗口结束
             running = False
 
+    if success_time >= 0:
+        if pygame.time.get_ticks() - success_time > 2000:  # 获胜已经等待2妙，就加载下一关
+            has_next = game_manager.next_level()
+            if not has_next:  # # 没有下一关，游戏结束
+                break
+            success_time = -1  # 将获胜时间清空
+
     screen.fill('black')
-    game_manager.update()
+    if game_manager.update():  # 每一帧需要执行的直接统一调用(打包)
+        success_time = pygame.time.get_ticks()  # 更新获胜时刻
 
     pygame.display.flip()  # 染完色更新一哈
 
