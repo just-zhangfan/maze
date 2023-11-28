@@ -26,6 +26,9 @@ class Player(pygame.sprite.Sprite):  # 小组件
 
         self.crash_sound = pygame.mixer.Sound('static/sounds/crash.mp3')
         self.crash_sound.set_volume(0.1)  # 10%大小声音
+        self.move_sound = pygame.mixer.Sound('static/sounds/move.mp3')
+        self.move_sound.set_volume(0.5)
+        self.move_voice_channel = pygame.mixer.Channel(7)  # 小车轰鸣声设置声道(防止叠加)
 
     def update_delta_time(self):
         cur_time = pygame.time.get_ticks()
@@ -37,11 +40,20 @@ class Player(pygame.sprite.Sprite):  # 小组件
         if key_pressed[pygame.K_UP]:
             self.move_velocity += self.move_acc * self.delta_time
             self.move_velocity = min(self.move_velocity, self.move_velocity_limit)
+            # 按前进后退时，小车有轰鸣声
+            if not self.move_voice_channel.get_busy():  # channel没有播放时才播放
+                self.move_voice_channel.play(self.move_sound)
         elif key_pressed[pygame.K_DOWN]:
             self.move_velocity -= self.move_acc * self.delta_time
             self.move_velocity = max(self.move_velocity, -self.move_velocity_limit)
+            # 按前进后退时，小车有轰鸣声
+            if not self.move_voice_channel.get_busy():  # channel没有播放时才播放
+                self.move_voice_channel.play(self.move_sound)
         else:
             self.move_velocity = int(self.move_velocity * self.friction)  # 没按up时，一直*f，直到速度降为0
+            # 没按的时候如果正在播放，就停掉
+            if self.move_voice_channel.get_busy():  # channel没有播放时才播放
+                self.move_voice_channel.stop()
 
         sign = 1  # 正表示前进，实现倒车的时候应该为朝反方向
         if self.move_velocity < 0:
