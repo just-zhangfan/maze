@@ -16,6 +16,10 @@ class GameManager:
         self.stars_cnt = 0  # 记录星星数量
         self.stars = pygame.sprite.Group()
         self.targets = pygame.sprite.Group()
+        # 吃星星音效
+        self.eat_stars_sound = pygame.mixer.Sound('static/sounds/eat_stars.wav')
+        self.eat_stars_sound.set_volume(0.3)
+
         self.load()
 
     def load_walls(self, walls):
@@ -76,6 +80,7 @@ class GameManager:
 
         # 判断吃星星碰撞，再删掉星星，碰撞函数也自己实现
         if pygame.sprite.spritecollide(self.player, self.stars, True, collided=collided_circle):
+            self.eat_stars_sound.play()
             self.stars_cnt -= 1
 
     def update(self):
