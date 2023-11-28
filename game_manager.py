@@ -2,6 +2,7 @@ import pygame
 from player import Player
 from wall import Wall
 from star import Star
+from target import Target
 from utils.collide import collided_rect
 
 
@@ -30,7 +31,10 @@ class GameManager:
             star.add(self.stars)
 
     def load_targets(self, targets):
-        pass
+        self.targets.empty()
+        for x, y in targets:
+            target = Target(x, y)
+            target.add(self.targets)
 
     def load_player(self, center_x, center_y, forward_angle):
         if self.player:
@@ -53,6 +57,13 @@ class GameManager:
                 x, y = map(int, fin.readline().split())
                 stars.append((x, y))
             self.load_stars(stars)
+
+            targets_cnt = int(fin.readline())
+            targets = []
+            for i in range(targets_cnt):
+                x, y = map(int, fin.readline().split())
+                targets.append((x, y))
+            self.load_targets(targets)
 
             center_x, center_y, forward_angle = map(int, fin.readline().split())
             self.load_player(center_x, center_y, forward_angle)
