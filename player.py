@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):  # 小组件
         super(Player, self).__init__()
         self.width = 100
         self.height = 50
-        self.forward_angle = 60  # 转弯的角度（与x轴顺时针转动的角度）
+        self.forward_angle = 0  # 转弯的角度（与x轴顺时针转动的角度）
         self.image_source = pygame.image.load('static/images/car.png').convert()
         self.image = pygame.transform.scale(self.image_source, (self.width, self.height))
         self.image = pygame.transform.rotate(self.image, -self.forward_angle)  # 这里参数是逆时针
@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):  # 小组件
         self.rect.center = center  # 将新的矩阵的中心与原来的中心重叠
 
     def move(self):
-        if self.move_velocity != 0:
+        if abs(self.move_velocity) > 50:  # 符合现实一点
             self.rotate()  # 只有车在前进或后退时，车身角度才会变化，原地打方向盘，车身角度不动
             # math.cos要接收弧度，需要将角度转换为弧度(几分之pi形式)
             vx = self.move_velocity * math.cos(math.pi * self.forward_angle / 180)
