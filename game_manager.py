@@ -1,6 +1,7 @@
 import pygame
 from player import Player
 from wall import Wall
+from star import Star
 from utils.collide import collided_rect
 
 
@@ -11,6 +12,9 @@ class GameManager:
         self.level = level  # 加个关卡
         self.player = None
         self.walls = pygame.sprite.Group()  # 墙不止一个可以创建一个组来维护
+        self.stars_cnt = 0  # 记录星星数量
+        self.stars = pygame.sprite.Group()
+        self.targets = pygame.sprite.Group()
         self.load()
 
     def load_walls(self, walls):
@@ -18,6 +22,15 @@ class GameManager:
         for x, y, width, height in walls:
             wall = Wall(x, y, width, height)
             wall.add(self.walls)  # 不要写反了
+
+    def load_stars(self, stars):
+        self.stars.empty()
+        for x, y in stars:
+            star = Star(x, y)
+            star.add(self.stars)
+
+    def load_targets(self, targets):
+        pass
 
     def load_player(self, center_x, center_y, forward_angle):
         if self.player:
@@ -34,6 +47,13 @@ class GameManager:
                 walls.append((x, y, width, height))
             self.load_walls(walls)
 
+            self.stars_cnt = int(fin.readline())
+            stars = []  # 与self.stars不一样
+            for i in range(self.stars_cnt):
+                x, y = map(int, fin.readline().split())
+                stars.append((x, y))
+            self.load_stars(stars)
+
             center_x, center_y, forward_angle = map(int, fin.readline().split())
             self.load_player(center_x, center_y, forward_angle)
 
@@ -44,6 +64,13 @@ class GameManager:
             self.player.crash()
 
     def update(self):
+        self.stars.update()
+        self.stars.draw(self.screen)
+
+        self.targets.update()
+        self.targets.draw(self.screen)
+
+        # 先画星星跟目标点，再画车
         self.player.update()  # 画之前update一下，动起来
         self.check_collide()
         self.screen.blit(self.player.image, self.player.rect)  # 将image画到rect
