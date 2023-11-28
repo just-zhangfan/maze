@@ -19,6 +19,8 @@ class GameManager:
         # 吃星星音效
         self.eat_stars_sound = pygame.mixer.Sound('static/sounds/eat_stars.wav')
         self.eat_stars_sound.set_volume(0.3)
+        self.success_sound = pygame.mixer.Sound('static/sounds/success.wav')
+        self.success_sound.set_volume(0.3)
 
         self.load()
 
@@ -83,6 +85,14 @@ class GameManager:
             self.eat_stars_sound.play()
             self.stars_cnt -= 1
 
+        # 吃完皇冠的时候播放成功的音效
+        # 必须是吃完星星才能吃皇冠
+        if self.stars_cnt == 0:
+            if pygame.sprite.spritecollide(self.player, self.targets, True, collided=collided_circle):
+                self.success_sound.play()
+                return True  # 这一关获胜
+        return False
+
     def update(self):
         self.stars.update()
         self.stars.draw(self.screen)
@@ -92,7 +102,8 @@ class GameManager:
 
         # 先画星星跟目标点，再画车
         self.player.update()  # 画之前update一下，动起来
-        self.check_collide()
+        success = self.check_collide()
         self.screen.blit(self.player.image, self.player.rect)  # 将image画到rect
         self.walls.update()  # 会自动调用组里面的每一个wall的update
         self.walls.draw(self.screen)  # 组调用draw，自动遍历组里所有对象，然后画到屏幕上
+        return success
