@@ -3,7 +3,7 @@ from player import Player
 from wall import Wall
 from star import Star
 from target import Target
-from utils.collide import collided_rect
+from utils.collide import collided_rect, collided_circle
 
 
 # 统一管理player, wall等资源
@@ -73,6 +73,10 @@ class GameManager:
         # 返回一个列表,空表示没有碰撞，会返回false
         if pygame.sprite.spritecollide(self.player, self.walls, False, collided=collided_rect):
             self.player.crash()
+
+        # 判断吃星星碰撞，再删掉星星，碰撞函数也自己实现
+        if pygame.sprite.spritecollide(self.player, self.stars, True, collided=collided_circle):
+            self.stars_cnt -= 1
 
     def update(self):
         self.stars.update()

@@ -1,4 +1,5 @@
 import pygame
+import math
 
 
 # 矩形碰撞
@@ -31,3 +32,13 @@ def collided_rect(a, b):
         if b.rect.clipline(x, y):  # 判断walls是否与x和y组成的线段相交
             return True
         return False
+
+
+# 只需判断车跟星星中心是否小于一个值？
+def collided_circle(a, b):
+    x1, y1 = a.rect.center
+    x2, y2 = b.rect.center
+    dx, dy = x1 - x2, y1 - y2
+    if math.sqrt(dx * dx + dy * dy) < 50:
+        return True
+    return False
