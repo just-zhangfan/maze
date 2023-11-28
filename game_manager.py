@@ -1,6 +1,7 @@
 import pygame
 from player import Player
 from wall import Wall
+from utils.collide import collided_rect
 
 
 # 统一管理player, wall等资源
@@ -15,7 +16,7 @@ class GameManager:
     def check_collide(self):  # 检测碰撞
         # 单个对象和组进行判断，false表示碰撞后组不会被删
         # 返回一个列表,空表示没有碰撞，会返回false
-        if pygame.sprite.spritecollide(self.player, self.walls, False):
+        if pygame.sprite.spritecollide(self.player, self.walls, False, collided=collided_rect):
             self.player.crash()
 
     def update(self):
