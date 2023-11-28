@@ -52,8 +52,8 @@ class Player(pygame.sprite.Sprite):  # 小组件
         else:
             self.rotate_velocity = 0  # 没有按的时候角速度清空
 
-    def rotate(self):  # 处理车身的转动
-        self.forward_angle += self.rotate_velocity * self.delta_time
+    def rotate(self, direction = 1):  # 处理车身的转动
+        self.forward_angle += self.rotate_velocity * self.delta_time * direction
         # 角度转动后需要改变下图像
         # 每次都要从原始图像来转，如果用新的转，就会一直叠加，然后一动一下就飞出去了
         self.image = pygame.transform.scale(self.image_source, (self.width, self.height))
@@ -64,14 +64,18 @@ class Player(pygame.sprite.Sprite):  # 小组件
         self.rect = self.image.get_rect()  # 重置rect得到新的矩阵
         self.rect.center = center  # 将新的矩阵的中心与原来的中心重叠
 
-    def move(self):
+    def move(self, direction = 1):
         if abs(self.move_velocity) > 50:  # 符合现实一点
-            self.rotate()  # 只有车在前进或后退时，车身角度才会变化，原地打方向盘，车身角度不动
+            self.rotate(direction)  # 只有车在前进或后退时，车身角度才会变化，原地打方向盘，车身角度不动
             # math.cos要接收弧度，需要将角度转换为弧度(几分之pi形式)
-            vx = self.move_velocity * math.cos(math.pi * self.forward_angle / 180)
-            vy = self.move_velocity * math.sin(math.pi * self.forward_angle / 180)
+            vx = self.move_velocity * math.cos(math.pi * self.forward_angle / 180) * direction
+            vy = self.move_velocity * math.sin(math.pi * self.forward_angle / 180) * direction
             self.rect.x += vx * self.delta_time
             self.rect.y += vy * self.delta_time
+
+    def crash(self):  # 撞墙了
+        # print('撞墙了')
+        self.move(-1)  # 退回来
 
     def update(self):
         self.update_delta_time()  # 每次update调用一次更新函数
